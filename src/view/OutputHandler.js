@@ -2,8 +2,7 @@ import { Console } from "@woowacourse/mission-utils";
 import { OUTPUT_MESSAGE, WINNING_DETAILS } from "../constants/message.js";
 
 export function printBuyAmount(amount) {
-  Console.print(`
-${amount}${OUTPUT_MESSAGE.BUY_COUNT}`);
+  Console.print(`${amount}${OUTPUT_MESSAGE.BUY_COUNT}`);
 }
 
 export function printLottos(lottos) {
@@ -13,8 +12,7 @@ export function printLottos(lottos) {
 }
 
 export function printResult(result) {
-  Console.print(`
-${OUTPUT_MESSAGE.WINNING_STATISTICS}`);
+  Console.print(`${OUTPUT_MESSAGE.WINNING_STATISTICS}`);
   Console.print(OUTPUT_MESSAGE.DIVIDING_LINE);
 
   const ranks = ['FIFTH', 'FOURTH', 'THIRD', 'SECOND', 'FIRST'];
