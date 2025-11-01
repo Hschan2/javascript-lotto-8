@@ -1,0 +1,25 @@
+
+export const BUY_LOTTO_AMOUNT = 1000;
+export const LOTTO_NUMBER_COUNT = 6;
+export const DELIMITER = ',';
+
+export const RANDOM_NUMBER = {
+  MIN_RANDOM_NUMBER: 1,
+  MAX_RANDOM_NUMBER: 45,
+};
+
+export const RANK = {
+  FIRST: 'FIRST',
+  SECOND: 'SECOND',
+  THIRD: 'THIRD',
+  FOURTH: 'FOURTH',
+  FIFTH: 'FIFTH',
+};
+
+export const WINNING_PRIZE = {
+  [RANK.FIRST]: 2000000000,
+  [RANK.SECOND]: 30000000,
+  [RANK.THIRD]: 1500000,
+  [RANK.FOURTH]: 50000,
+  [RANK.FIFTH]: 5000,
+};
