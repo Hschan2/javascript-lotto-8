@@ -1,0 +1,61 @@
+
+import { BUY_LOTTO_AMOUNT, WINNING_PRIZE } from "./constants/constant.js";
+import { BUY_LOTTO_ERROR, INPUT_ERROR } from "./constants/error.js";
+import { generateRandomNumbers } from "./utils/RandomNumberGenerator.js";
+import Lotto from "./Lotto.js";
+
+class User {
+  #amount;
+  #lottos;
+
+  constructor(amount) {
+    this.#validate(amount);
+    this.#amount = Number(amount);
+    this.#lottos = [];
+  }
+
+  #validate(amount) {
+    if (String(amount).trim() === '') throw new Error(INPUT_ERROR.EMPTY_INPUT);
+    if (!/^\d+$/.test(amount)) throw new Error(INPUT_ERROR.NOT_NUMBER);
+    if (Number(amount) % BUY_LOTTO_AMOUNT !== 0) {
+      throw new Error(BUY_LOTTO_ERROR.NOT_ONE_THOUSAND_UNIT);
+    }
+  }
+
+  buyLottos() {
+    const lottoCount = this.#amount / BUY_LOTTO_AMOUNT;
+    for (let i = 0; i < lottoCount; i++) {
+      const randomNumbers = generateRandomNumbers();
+      this.#lottos.push(new Lotto(randomNumbers));
+    }
+  }
+
+  calculateTotalResult(winningLotto) {
+    const result = { FIRST: 0, SECOND: 0, THIRD: 0, FOURTH: 0, FIFTH: 0 };
+    this.#lottos.forEach(lotto => {
+      const rank = lotto.getRank(winningLotto);
+      if (rank) {
+        result[rank]++;
+      }
+    });
+    return result;
+  }
+
+  calculateEarningRate(result) {
+    const totalWinnings = Object.entries(result).reduce((sum, [rank, count]) => {
+      return sum + (WINNING_PRIZE[rank] * count);
+    }, 0);
+    const earningRate = (totalWinnings / this.#amount) * 100;
+    return earningRate.toFixed(1);
+  }
+
+  getLottoCount() {
+    return this.#lottos.length;
+  }
+
+  getLottos() {
+    return this.#lottos;
+  }
+}
+
+export default User;
