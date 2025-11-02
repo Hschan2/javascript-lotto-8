@@ -35,7 +35,7 @@ class User {
     this.#lottos.forEach(lotto => {
       const rank = lotto.getRank(winningLotto);
       if (rank) {
-        result[rank]++;
+        result[rank] += 1;
       }
     });
     return result;
