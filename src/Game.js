@@ -3,7 +3,8 @@ import { readBuyAmount, readWinningNumbers, readBonusNumber } from "./view/Input
 import { printBuyAmount, printLottos, printResult, printEarningRate, printError } from "./view/OutputHandler.js";
 import User from "./User.js";
 import Lotto from "./Lotto.js";
-import { DELIMITER } from "./constants/constant.js";
+import { BUY_LOTTO_AMOUNT, DELIMITER } from "./constants/constant.js";
+import { generateRandomNumbers } from "./utils/RandomNumberGenerator.js";
 
 class Game {
   #user;
@@ -29,9 +30,21 @@ class Game {
   }
 
   #issueLottos() {
-    this.#user.buyLottos();
+    const amount = this.#user.getAmount();
+    const lottoCount = amount / BUY_LOTTO_AMOUNT;
+    this.#generateRandomLottoNumbers(lottoCount)
+
     printBuyAmount(this.#user.getLottoCount());
     printLottos(this.#user.getLottos());
+  }
+
+  #generateRandomLottoNumbers(lottoCount) {
+    const lottos = [];
+    for (let i = 0; i < lottoCount; i++) {
+      const randomNumbers = generateRandomNumbers();
+      lottos.push(new Lotto(randomNumbers));
+    }
+    this.#user.setLottos(lottos);
   }
 
   async #readWinningLotto() {
