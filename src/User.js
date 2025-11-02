@@ -1,8 +1,6 @@
 
 import { BUY_LOTTO_AMOUNT, WINNING_PRIZE } from "./constants/constant.js";
 import { BUY_LOTTO_ERROR, INPUT_ERROR } from "./constants/error.js";
-import { generateRandomNumbers } from "./utils/RandomNumberGenerator.js";
-import Lotto from "./Lotto.js";
 
 class User {
   #amount;
@@ -19,14 +17,6 @@ class User {
     if (!/^\d+$/.test(amount)) throw new Error(INPUT_ERROR.NOT_NUMBER);
     if (Number(amount) % BUY_LOTTO_AMOUNT !== 0) {
       throw new Error(BUY_LOTTO_ERROR.NOT_ONE_THOUSAND_UNIT);
-    }
-  }
-
-  buyLottos() {
-    const lottoCount = this.#amount / BUY_LOTTO_AMOUNT;
-    for (let i = 0; i < lottoCount; i++) {
-      const randomNumbers = generateRandomNumbers();
-      this.#lottos.push(new Lotto(randomNumbers));
     }
   }
 
@@ -49,12 +39,20 @@ class User {
     return earningRate.toFixed(1);
   }
 
+  setLottos(lottos) {
+    this.#lottos = lottos;
+  }
+
   getLottoCount() {
     return this.#lottos.length;
   }
 
   getLottos() {
     return this.#lottos;
+  }
+
+  getAmount() {
+    return this.#amount;
   }
 }
 
