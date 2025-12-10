@@ -1,6 +1,8 @@
 
 import { BUY_LOTTO_AMOUNT, WINNING_PRIZE } from "./constants/constant.js";
 import { BUY_LOTTO_ERROR, INPUT_ERROR } from "./constants/error.js";
+import Lotto from "./Lotto.js";
+import { generateRandomNumbers } from "./utils/RandomNumberGenerator.js";
 
 class User {
   #amount;
@@ -20,6 +22,16 @@ class User {
     }
   }
 
+  purchaseLottos() {
+    const lottoCount = this.#amount / BUY_LOTTO_AMOUNT;
+    const newLottos = [];
+    for (let i = 0; i < lottoCount; i++) {
+      const randomNumbers = generateRandomNumbers();
+      newLottos.push(new Lotto(randomNumbers));
+    }
+    this.#lottos = newLottos;
+  }
+
   calculateTotalResult(winningLotto) {
     const result = { FIRST: 0, SECOND: 0, THIRD: 0, FOURTH: 0, FIFTH: 0 };
     this.#lottos.forEach(lotto => {
@@ -31,10 +43,14 @@ class User {
     return result;
   }
 
-  calculateEarningRate(result) {
-    const totalWinnings = Object.entries(result).reduce((sum, [rank, count]) => {
+  #calculateTotalWinnings(result) {
+    return Object.entries(result).reduce((sum, [rank, count]) => {
       return sum + (WINNING_PRIZE[rank] * count);
     }, 0);
+  }
+
+  calculateEarningRate(result) {
+    const totalWinnings = this.#calculateTotalWinnings(result);
     const earningRate = (totalWinnings / this.#amount) * 100;
     return earningRate.toFixed(1);
   }
