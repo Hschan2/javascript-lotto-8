@@ -3,12 +3,11 @@ import { readBuyAmount, readWinningNumbers, readBonusNumber } from "./view/Input
 import { printBuyAmount, printLottos, printResult, printEarningRate, printError } from "./view/OutputHandler.js";
 import User from "./User.js";
 import Lotto from "./Lotto.js";
-import { BUY_LOTTO_AMOUNT, DELIMITER } from "./constants/constant.js";
-import { generateRandomNumbers } from "./utils/RandomNumberGenerator.js";
+import { DELIMITER } from "./constants/constant.js";
 
 class Game {
   #user;
-  #winningLotto;
+  #winningNumber;
 
   async start() {
     await this.#readBuyAmount();
@@ -30,28 +29,16 @@ class Game {
   }
 
   #issueLottos() {
-    const amount = this.#user.getAmount();
-    const lottoCount = amount / BUY_LOTTO_AMOUNT;
-    this.#generateRandomLottoNumbers(lottoCount)
-
+    this.#user.purchaseLottos();
     printBuyAmount(this.#user.getLottoCount());
     printLottos(this.#user.getLottos());
-  }
-
-  #generateRandomLottoNumbers(lottoCount) {
-    const lottos = [];
-    for (let i = 0; i < lottoCount; i++) {
-      const randomNumbers = generateRandomNumbers();
-      lottos.push(new Lotto(randomNumbers));
-    }
-    this.#user.setLottos(lottos);
   }
 
   async #readWinningLotto() {
     while (true) {
       try {
         const { winningNumbersArr, bonusNumber } = await this.#getAndValidateWinningLottoInput();
-        this.#winningLotto = {
+        this.#winningNumber = {
           numbers: winningNumbersArr,
           bonus: bonusNumber,
         };
@@ -74,7 +61,7 @@ class Game {
   }
 
   #showResult() {
-    const result = this.#user.calculateTotalResult(this.#winningLotto);
+    const result = this.#user.calculateTotalResult(this.#winningNumber);
     const earningRate = this.#user.calculateEarningRate(result);
     printResult(result);
     printEarningRate(earningRate);
